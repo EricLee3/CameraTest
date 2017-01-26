@@ -20,7 +20,6 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
 
 // SurfaceHolder.Callback을 설정함으로써 Surface가 생성/소멸되었음을
-
 // 알 수 있습니다.
         mHolder = getHolder();
         mHolder.addCallback(this);
@@ -30,7 +29,6 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
 
 // Surface가 생성되었다면, 카메라의 인스턴스를 받아온 후 카메라의
-
 // Preview 를 표시할 위치를 설정합니다.
         mCamera = Camera.open();
         try {
@@ -46,9 +44,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
 
 // 다른 화면으로 돌아가면, Surface가 소멸됩니다. 따라서 카메라의 Preview도
-
 // 중지해야 합니다. 카메라는 공유할 수 있는 자원이 아니기에, 사용하지 않을
-
 // 경우 -액티비티가 일시정지 상태가 된 경우 등 - 자원을 반환해야합니다.
         mCamera.stopPreview();
         mCamera = null;

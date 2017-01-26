@@ -7,24 +7,14 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,16 +67,20 @@ public class MainActivity extends AppCompatActivity {
             if (data != null)
                 Log.i(TAG, "JPEG 사진 찍었음!");
             Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            try {
+                String imageSaveUri = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "store picture", "picture stored");
+                Uri uri = Uri.parse(imageSaveUri);
+                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+            } catch(Exception e)  {
+                Log.e("store picture", "storing failure", e);
+            }
             imageview.setImageBitmap(bitmap);
             camera.startPreview();
             inProgress = false;
-
-
         }
     };
 
     private SurfaceHolder.Callback surfaceListener = new SurfaceHolder.Callback() {
-
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
             // TODO Auto-generated method stub
@@ -115,8 +109,6 @@ public class MainActivity extends AppCompatActivity {
             parameters.setPreviewSize(width, height);
             camera.startPreview();
             Log.i(TAG, "카메라 미리보기 활성");
-
         }
-
     };
 }
